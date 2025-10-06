@@ -20,10 +20,11 @@ RUN apk add --no-cache tzdata
 RUN mkdir /CLIProxyAPI
 
 COPY --from=builder /app/CLIProxyAPI /CLIProxyAPI/CLIProxyAPI
-# 直接复制示例文件并重命名
-COPY --from=builder /app/config.example.yaml /CLIProxyAPI/config.yaml
 
 WORKDIR /CLIProxyAPI
+
+# 创建一个基本的配置文件
+RUN echo 'server:\n  port: 8317\n  host: 0.0.0.0' > /CLIProxyAPI/config.yaml
 
 EXPOSE 8317
 
