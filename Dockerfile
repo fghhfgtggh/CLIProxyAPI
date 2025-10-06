@@ -3,10 +3,12 @@ FROM golang:1.24-alpine AS builder
 WORKDIR /app
 
 COPY go.mod go.sum ./
-
 RUN go mod download
 
 COPY . .
+
+# 复制示例配置文件并重命名为 config.yaml
+RUN cp config.example.yaml config.yaml
 
 ARG VERSION=dev
 ARG COMMIT=none
@@ -20,9 +22,8 @@ RUN apk add --no-cache tzdata
 
 RUN mkdir /CLIProxyAPI
 
-COPY --from=builder ./app/CLIProxyAPI /CLIProxyAPI/CLIProxyAPI
-# 添加这一行，复制配置文件
-COPY --from=builder ./app/config.yaml /CLIProxyAPI/config.yaml
+COPY --from=builder /app/CLIProxyAPI /CLIProxyAPI/CLIProxyAPI
+COPY --from=builder /app/config.yaml /CLIProxyAPI/config.yaml
 
 WORKDIR /CLIProxyAPI
 
