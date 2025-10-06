@@ -21,6 +21,8 @@ RUN apk add --no-cache tzdata
 RUN mkdir /CLIProxyAPI
 
 COPY --from=builder ./app/CLIProxyAPI /CLIProxyAPI/CLIProxyAPI
+# 添加这一行，复制配置文件
+COPY --from=builder ./app/config.yaml /CLIProxyAPI/config.yaml
 
 WORKDIR /CLIProxyAPI
 
